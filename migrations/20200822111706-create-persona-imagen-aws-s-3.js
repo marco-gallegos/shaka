@@ -11,6 +11,9 @@ module.exports = {
       codigo: {
         type: Sequelize.CHAR
       },
+      nombre: {
+        type: Sequelize.CHAR
+      },
       etag: {
         type: Sequelize.CHAR
       },

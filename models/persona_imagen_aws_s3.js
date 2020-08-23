@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   persona_imagen_aws_s3.init({
     codigo: DataTypes.CHAR,
+    nombre: DataTypes.CHAR,
     etag: DataTypes.CHAR
   }, {
     sequelize,
