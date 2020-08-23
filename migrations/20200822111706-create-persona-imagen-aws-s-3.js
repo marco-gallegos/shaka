@@ -14,7 +14,13 @@ module.exports = {
       nombre: {
         type: Sequelize.CHAR
       },
+      key: {
+        type: Sequelize.CHAR
+      },
       etag: {
+        type: Sequelize.CHAR
+      },
+      versionid: {
         type: Sequelize.CHAR
       },
       createdAt: {
