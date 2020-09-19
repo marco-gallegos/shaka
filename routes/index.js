@@ -8,5 +8,5 @@ module.exports = (app) => {
     
     app.post('/api/persona', PersonaController.create);
     
-    app.get('/api/persona', PersonaController.list);
+    app.get('/api/persona/:nombre/:codigo', PersonaController.list);
 };
