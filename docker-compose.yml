@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  shaka:
+    build: .
+    ports:
+      - 7000:7000
+    volumes:
+        - .:/app
