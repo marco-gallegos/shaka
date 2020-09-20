@@ -37,10 +37,14 @@ module.exports = {
                 }
             })
             .then(persona_imagen_aws_s3 => {
-                response.status(200).send(persona_imagen_aws_s3)
+                dataResponse.data = persona_imagen_aws_s3;
+                dataResponse.message = "se encontraron registros de la persona";
+                return response.status(200).send(dataResponse);
             })
             .catch(error => {
-                res.status(400).send(error)
+                dataResponse.error = error;
+                dataResponse.message = "error al obtener usuario";
+                return response.status(404).send(dataResponse);
             });
         }
 
