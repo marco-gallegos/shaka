@@ -134,7 +134,7 @@ module.exports = {
                         nombre: request.body.nombre,
                         key: imgkey,
                         etag: "bug inecesario",
-                        versionid: data.VersionId
+                        versionid: "nada"//data.VersionId
                     });
                 });
             }

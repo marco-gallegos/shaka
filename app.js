@@ -3,10 +3,19 @@ const logger        = require('morgan');
 const fileUpload    = require('express-fileupload');
 const bodyParser    = require('body-parser');// This will be our application entry. We'll setup our server here.
 const http = require('http');
+const cors = require("cors");
 require('dotenv').config()
 
 // Set up the express app
 const app = express();
+
+//cors
+let header = {
+     'Access-Control-Allow-Headers': '*',
+     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+     'Content-Type': 'application/json'
+}
+app.use(cors(header));
 
 // Log requests to the console.
 app.use(logger('dev'));
