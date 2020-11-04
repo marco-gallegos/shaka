@@ -114,6 +114,100 @@ module.exports = {
                     Bucket: process.env.s3_bucket,
                     Key: imgkey, // nombre que tendra -> se usa para descargar
                     // el body debe ser secuancia binaria
+                    Body: request.files[index].data
+                }
+                //console.log(aws_s3.config);
+                //console.log(process.env.s3_bucket);
+                //console.log(parametrosPutObject);
+    
+                // submos la imagen
+                // FIXME: lo ideal es que esto se comporte como sincrono y hasta que se resuelvan las peticiones continue
+                await aws_s3.putObject(parametrosPutObject,(err,data)=>{
+                    /*
+                    console.table({'error':err});
+                    console.log(data);
+                    console.log(data.ETag);
+                    console.log(data.VersionId);
+                    */
+                    persona_imagen_aws_s3.create ({
+                        codigo: request.body.codigo,
+                        nombre: request.body.nombre,
+                        key: imgkey,
+                        etag: "bug inecesario",
+                        versionid: data.VersionId
+                    });
+                });
+            }
+            dataResponse.message = "se almacenaron las imagenes de forma exitosa`";
+        }
+
+        return response.status(code=200).send(dataResponse)
+    },
+
+    /**
+     * Almacenar los datos de 
+     * @param {*} request 
+     * @param {*} response 
+     */
+    async create2(request, response) {
+        console.log(request.files);
+        //console.log(request.body);
+        //console.log(Object.keys(request.files).length);
+        
+        let rules = {
+            nombre: 'required',
+            codigo: 'required',
+        };
+        let dataResponse= {
+            status : true,
+            data: null,
+            error: false,
+            message: "Desconocido",
+        };
+        
+        // validacion de el request
+        let validation = new Validator(request.body, rules);
+        let numero_imagenes = Object.keys(request.files).length;
+        
+        if (numero_imagenes < 15){
+            dataResponse.status = false;
+            dataResponse.error = true;
+            dataResponse.message = "no hay suficientes imnagenes";
+        }
+        if(validation.fails()){
+            dataResponse.status = false;
+            dataResponse.error = true;
+            dataResponse.message = validation.errors.errors;
+        }else{
+            // validar la existencia en db de el registro
+            let existe = await persona_imagen_aws_s3.findOne({
+                where: {
+                    codigo: request.body.codigo
+                }
+            });
+            
+            //console.table({existeendb: existe});
+            if(existe){
+                dataResponse.status = false;
+                dataResponse.error = true;
+                dataResponse.message = "ya esta registrado en la db";
+            }
+        }
+        
+        if (!dataResponse.error){
+
+            for (const index in request.files) {
+                let imgkey = `${request.body.nombre}/${request.body.codigo}_${index}.jpeg`;
+                console.log({
+                    "file": request.files[index],
+                    "imgkey": imgkey
+                })
+                continue;
+                // configuracion para subir a s3
+                let parametrosPutObject = {
+                    Bucket: process.env.s3_bucket,
+                    Key: imgkey, // nombre que tendra -> se usa para descargar
+                    // el body debe ser secuancia binaria
                     Body: request.files[1].data
                 }
                 //console.log(aws_s3.config);

@@ -1,8 +1,8 @@
 {
-  "name": "s3-appdelante",
+  "name": "shaka",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "api para almacenar imagenes en aws",
+  "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
     "test": "jest --verbose"
