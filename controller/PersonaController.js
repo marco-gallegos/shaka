@@ -101,6 +101,7 @@ module.exports = {
             }
         }
         
+        //FIXME: cachar errores y borrar info
         if (!dataResponse.error){
 
             for (const index in request.files) {
@@ -129,13 +130,15 @@ module.exports = {
                     console.log(data.ETag);
                     console.log(data.VersionId);
                     */
-                    persona_imagen_aws_s3.create ({
-                        codigo: request.body.codigo,
-                        nombre: request.body.nombre,
-                        key: imgkey,
-                        etag: "bug inecesario",
-                        versionid: "nada"//data.VersionId
-                    });
+                    if(!err){
+                        persona_imagen_aws_s3.create ({
+                            codigo: request.body.codigo,
+                            nombre: request.body.nombre,
+                            key: imgkey,
+                            etag: "bug inecesario",
+                            versionid: "nada"//data.VersionId
+                        });
+                    }
                 });
             }
             dataResponse.message = "se almacenaron las imagenes de forma exitosa`";
