@@ -106,10 +106,12 @@ module.exports = {
 
             for (const index in request.files) {
                 let imgkey = `${request.body.nombre}/${request.body.codigo}_${index}.jpeg`;
+                /*
                 console.log({
                     "file": request.files[index],
                     "imgkey": imgkey
                 })
+                */
                 // configuracion para subir a s3
                 let parametrosPutObject = {
                     Bucket: process.env.s3_bucket,
@@ -121,12 +123,12 @@ module.exports = {
                 //console.log(process.env.s3_bucket);
                 //console.log(parametrosPutObject);
     
-                // submos la imagen
+                // subimos la imagen
                 // FIXME: lo ideal es que esto se comporte como sincrono y hasta que se resuelvan las peticiones continue
                 await aws_s3.putObject(parametrosPutObject,(err,data)=>{
                     /*
-                    console.table({'error':err});
                     console.log(data);
+                    console.table({'error':err});
                     console.log(data.ETag);
                     console.log(data.VersionId);
                     */
@@ -138,6 +140,8 @@ module.exports = {
                             etag: "bug inecesario",
                             versionid: "nada"//data.VersionId
                         });
+                    }else{
+                        console.log(err)
                     }
                 });
             }
