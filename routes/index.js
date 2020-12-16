@@ -10,4 +10,5 @@ module.exports = (app) => {
     app.post('/api/persona/body', PersonaController.create2);
     
     app.get('/api/persona/:nombre/:codigo', PersonaController.list);
+    app.delete('/api/persona', PersonaController.delete);
 };

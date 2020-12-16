@@ -105,6 +105,7 @@ module.exports = {
         //FIXME: cachar errores y borrar info
         if (!dataResponse.error){
 
+            
             for (const index in request.files) {
                 let imgkey = `${request.body.nombre}/${request.body.codigo}_${index}.jpeg`;
                 /*
@@ -146,6 +147,7 @@ module.exports = {
                     }
                 });
             }
+
             dataResponse.message = "se almacenaron las imagenes de forma exitosa`";
         }
 
@@ -245,4 +247,58 @@ module.exports = {
 
         return response.status(code=200).send(dataResponse)
     },
+
+
+    async delete(request, res){
+        let rules = {
+            nombre: 'required',
+            codigo: 'required',
+        };
+        let dataResponse= {
+            status : true,
+            statusCode: 422,
+            data: null,
+            error: false,
+            message: "Desconocido",
+        };
+        
+        // validacion de el request
+        let validation = new Validator(request.body, rules);
+        
+        if(validation.fails()){
+            dataResponse.status = false;
+            dataResponse.error = true;
+            dataResponse.message = validation.errors.errors;
+        }else{
+            // validar la existencia en db de el registro
+            let existe = await persona_imagen_aws_s3.findAll({
+                where: {
+                    codigo: request.body.codigo,
+                    nombre: request.body.nombre
+                }
+            });
+            
+            console.log(existe)
+            console.table({existeendb: existe.length});
+            if(existe.length = 0){
+
+                const del = await Promise.all(
+                    existe.map(async (persona)=>{
+                        persona.destroy();
+                    })
+                )
+
+                dataResponse.status = true;
+                dataResponse.statusCode = 200;
+                dataResponse.error = false;
+                dataResponse.message = "Se eliminaros los registros";
+            }else{
+                dataResponse.status = false;
+                dataResponse.statusCode = 404;
+                dataResponse.error = true;
+                dataResponse.message = "no se encontraron registros";
+            }
+        }
+        return res.status(dataResponse.statusCode).json(dataResponse);
+    }
 };
