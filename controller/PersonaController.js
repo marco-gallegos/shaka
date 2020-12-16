@@ -57,8 +57,9 @@ module.exports = {
      * @param {*} response 
      */
     async create(request, response) {
-        //console.log(request.files);
-        //console.log(request.body);
+        console.log("create normal")
+        console.log(request.body);
+        console.log(request.files);
         //console.log(Object.keys(request.files).length);
         
         let rules = {
@@ -208,7 +209,7 @@ module.exports = {
                 console.log({
                     "file": request.files[index],
                     "imgkey": imgkey
-                })
+                }) 
                 continue;
                 // configuracion para subir a s3
                 let parametrosPutObject = {
