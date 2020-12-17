@@ -280,7 +280,7 @@ module.exports = {
             
             console.log(existe)
             console.table({existeendb: existe.length});
-            if(existe.length = 0){
+            if(existe.length >= 0){
 
                 const del = await Promise.all(
                     existe.map(async (persona)=>{
